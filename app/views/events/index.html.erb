@@ -36,6 +36,9 @@
 	<%= submit_tag("Import File") %>
 	<% end %>
 	<%= button_to 'Export File', events_export_path, method: :post %>
+	<% if current_user.provider == 'google_oauth2'%>
+	<%= button_to 'Import Google Calendar', events_importevent_path, method: :post %>
+	<% end%>
 </p>
 
 <br>

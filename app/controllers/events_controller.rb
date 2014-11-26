@@ -25,6 +25,26 @@ class EventsController < ApplicationController
   # POST /events.json
   def create
     @event = Event.new(event_params)
+    
+    if current_user.provider == 'google_oauth2'
+    #Save the event to google calendar
+    client = Google::APIClient.new
+    client.authorization.access_token =  current_user.token
+    service = client.discovered_api('calendar', 'v3')
+    puts("Event start time:#{@event.start_time} end time: #{@event.end_time}")
+    tmp_event = {
+      'summary' => @event.title,
+      'description' => @event.description,
+      'location' => 'PaNa',
+      'start' => {'dateTime' => @event.start_time.to_datetime.rfc3339},
+      'end' => {'dateTime' => @event.end_time.to_datetime.rfc3339},
+      'attendees' => [ { "email" => current_user.email } ] }
+    result = client.execute(:api_method => service.events.insert,
+    :parameters => {'calendarId' => current_user.email, 'sendNotifications' => true},
+    :body => JSON.dump(tmp_event),
+    :headers => {'Content-Type' => 'application/json'})
+    puts("Result from export; #{result.body}")  
+    end
 
     respond_to do |format|
       if @event.save
@@ -119,13 +139,45 @@ class EventsController < ApplicationController
     #puts("Current Event: #{event}")
     end
     calendar.publish
-    file = File.new("tmp/sample.ics", "w+")
+    filename=current_user.email
+    file = File.new("tmp/#{filename}.ics", "w+")
     file.write(calendar.to_ical)
     file.close
-    send_file("tmp/sample.ics")
+    send_file("tmp/#{filename}.ics")
   end    
   
+  #Imports events from google calendar
+  def importevent
+    page_token = nil
+    client = Google::APIClient.new
+    client.authorization.access_token =  current_user.token
+    service = client.discovered_api('calendar', 'v3')
+    
+    result = client.execute(:api_method => service.events.list,
+    :parameters => {'calendarId' => current_user.email})
+    while true
+      
+      events = result.data.items
+      events.each do |event|
+         puts("Start time: #{event.start.date_time}")
+       # print "Event summary:#{event.summary} , start:#{event.start.to_s} , end:#{event.end}  \n "
+         @event = Event.new(params[:event])
+         @event.assign_attributes(:title => " #{event.summary}", :description => "#{event.description}", :start_time => "#{event.start.date_time}" , :end_time => "#{event.end.date_time}")
+         #if Event.exists?(subject: @event.subject, startTime:@event.startTime, endTime:@event.endTime)
+         #else
+          @event.save
+          #end
   
+      end
+      if !(page_token = result.data.next_page_token)
+      break
+      end
+      result = client.execute(:api_method => service.events.list,
+      :parameters => {'calendarId' => current_user.email,
+        'pageToken' => page_token})
+    end
+    redirect_to '/events', :notice => "Successfully Imported events from Google calendar"
+  end
   
   
 

@@ -41,6 +41,10 @@
 </div> -->
   
   <div class="actions">
-    <%= f.submit %>
+    <% if current_user.provider == 'google_oauth2'%>
+	<%= f.submit("Create and Insert to Google ") %>
+	<% else %>
+	<%= f.submit %>
+	<% end %>
   </div>
 <% end %>
