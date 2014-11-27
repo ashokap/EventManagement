@@ -7,7 +7,7 @@
 $(document).ready ->
 
   $("#calendar").fullCalendar(
-    events: '/events.json'
+    events: '/events.json' 
     
     header: {
         left: 'prev,next',
@@ -15,3 +15,25 @@ $(document).ready ->
         right: 'month,agendaWeek,agendaDay',
     }
   )
+  
+  
+  # $(document).on('ready page:load', function(){
+# 
+# $('#calendar').fullCalendar({
+#   
+   # events: '/events.json' 
+#     
+    # header: {
+        # left: 'prev,next',
+        # center: 'title',
+        # right: 'month,agendaWeek,agendaDay',
+    # }
+# 
+#    
+  # });
+#   
+# });
+#   
+  
+  
+  

@@ -36,10 +36,6 @@ gem 'fullcalendar-rails'
 
 
 
-
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-
 gem 'jquery-ui-rails', '~> 4.2.1'
 
 gem 'jquery-datetimepicker-rails'
