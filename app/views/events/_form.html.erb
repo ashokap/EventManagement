@@ -1,50 +1,45 @@
 <%= form_for(@event) do |f| %>
-  <% if @event.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+<% if @event.errors.any? %>
+<div id="error_explanation">
+	<h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
 
-      <ul>
-      <% @event.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+	<ul>
+		<% @event.errors.full_messages.each do |msg| %>
+		<li>
+			<%= msg %>
+		</li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
 
-  <div class="field">
-    <%= f.label :Title %><br>
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :Description %><br>
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label "Start Time" %><br>
-    <%= f.text_field :start_time %>
-  </div>
-  <div class="field">
-    <%= f.label "End Time" %><br>
-    <%= f.text_field :end_time %>
-  </div>
-  
-  <!-- <div class="field">
+<div class="field">
+	<%= f.label :Title %>
+	<br>
+	<%= f.text_field :title %>
+</div>
+<div class="field">
+	<%= f.label :Description %>
+	<br>
+	<%= f.text_area :description %>
+</div>
+<div class="field">
 	<%= f.label "Start Time" %>
 	<br>
 	<%= f.text_field :start_time %>
 </div>
-
 <div class="field">
 	<%= f.label "End Time" %>
 	<br>
 	<%= f.text_field :end_time %>
-</div> -->
-  
-  <div class="actions">
-    <% if current_user.provider == 'google_oauth2'%>
-	<%= f.submit("Create and Insert to Google ") %>
+</div>
+
+<div class="actions">
+	<!-- If user is authenticated with Google and is creating a new record, then save and store the event to google calendar. -->
+	<% if (current_user.provider == 'google_oauth2' && !@event.persisted?)%>
+		<%= f.submit("Create and Insert to Google ", class: "btn btn-primary") %>
 	<% else %>
-	<%= f.submit %>
+		<%= f.submit(class: "btn btn-primary") %>
 	<% end %>
-  </div>
+</div>
 <% end %>

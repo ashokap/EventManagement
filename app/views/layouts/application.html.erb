@@ -1,12 +1,37 @@
 <!DOCTYPE html>
 <html>
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> -->
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
 <head>
   <title></title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
-<div id="user_nav" align="right">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="http://panainfotech.com/"><b> Event Management</b></a>
+    </div>
+    <%if user_signed_in?%>
+    <div>
+      <ul class="nav navbar-nav">
+        <li><%= link_to raw("Export File"), events_export_path, class: "btn btn-block", method: :post %></li>
+        <% if current_user.provider == 'google_oauth2'%>
+		<li><%= link_to raw("Import Google Calendar"), events_importevent_path, class: "btn btn-block", method: :post %></li>
+		<% end%> 
+      </ul>
+    </div>
+  </div>
+  <%end %>
+  <div id="user_nav" align="right">
 	<%if user_signed_in?%>
 	Signed in as <%= current_user.email%>. Not you?
 	<%= link_to "Sign out", destroy_user_session_path%>
@@ -14,11 +39,14 @@
 	<%= link_to "Sign Up", new_user_registration_path %> or <%= link_to "Sign In", new_user_session_path%>
 	<% end %>
 </div>
-<p class="notice"><%= notice %></p>
- <p class="alert"><%= alert %></p>
-<body>
+</nav>
 
+
+<body>
+<p ><%= notice %></p>
+ <p ><%= alert %></p>
 <%= yield %>
 
 </body>
+
 </html>

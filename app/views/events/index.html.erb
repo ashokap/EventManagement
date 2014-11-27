@@ -1,50 +1,22 @@
-<!-- <h1>Listing Events</h1> -->
+<!-- <div class="container">
+  <div class="jumbotron">
+    <%= form_tag(events_import_path, :multipart => true) do %>
+<p>
+	<%= file_field_tag(:file) %>
+<br />
+	<%= submit_tag("Import File",class: "btn btn-primary") %>
+	<% end %>
+	</p>
 
-<!-- <table>
-<thead>
-<tr>
-<th>Title</th>
-<th>Description</th>
-<th>Start time</th>
-<th>End time</th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-
-<tbody>
-<% @events.each do |event| %>
-<tr>
-<td><%= event.title %></td>
-<td><%= event.description %></td>
-<td><%= event.start_time %></td>
-<td><%= event.end_time %></td>
-<td><%= link_to 'Show', event %></td>
-<td><%= link_to 'Edit', edit_event_path(event) %></td>
-<td><%= link_to 'Destroy', event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
-<% end %>
-</tbody>
-</table> -->
+<br>
+  </div>
+</div> -->
 
 <%= form_tag(events_import_path, :multipart => true) do %>
 <p>
 	<%= file_field_tag(:file) %>
+<br />
+	<%= submit_tag("Import File",class: "btn btn-primary") %>  <%= link_to 'New Event', new_event_path,class: "btn btn-success" %>
 </p>
-<p>
-	<%= submit_tag("Import File") %>
 	<% end %>
-	<%= button_to 'Export File', events_export_path, method: :post %>
-	<% if current_user.provider == 'google_oauth2'%>
-	<%= button_to 'Import Google Calendar', events_importevent_path, method: :post %>
-	<% end%>
-</p>
-
-<br>
-
-<%= link_to 'New Event', new_event_path %>
-
-<br>
-
 <div id="calendar"></div>
