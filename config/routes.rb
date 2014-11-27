@@ -1,8 +1,21 @@
 FullcalendarAndRailsExample::Application.routes.draw do
+  devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
+  
+  devise_scope :user do
+    authenticated :user do
+      root 'events#index', as: :authenticated_root
+    end
+    unauthenticated do
+      root 'devise/sessions#new', as: :unauthenticated_root
+    end
+ end
+  
   resources :events
 
   post 'events/import'
   post 'events/export'
+  post 'events/insert'
+  post 'events/importevent'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

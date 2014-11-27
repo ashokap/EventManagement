@@ -28,13 +28,11 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
 group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
+# bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
 
 gem 'fullcalendar-rails'
-
-
 
 gem 'jquery-ui-rails', '~> 4.2.1'
 
@@ -43,6 +41,13 @@ gem 'jquery-datetimepicker-rails'
 #iCalendar gem
 gem 'icalendar'
 
+#Gem needed for User authentication
+gem 'devise'
+
+#needed for exporting calendar events to google calendar
+gem 'google-api-client', :require => 'google/api_client'
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'

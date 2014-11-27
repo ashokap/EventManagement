@@ -51,8 +51,19 @@
 <br>
 <%= f.text_field :end_time %>
 </div> -->
+<<<<<<< HEAD
 
 <div class="actions">
 	<%= f.submit %>
 </div>
+=======
+  
+  <div class="actions">
+    <% if current_user.provider == 'google_oauth2'%>
+	<%= f.submit("Create and Insert to Google ") %>
+	<% else %>
+	<%= f.submit %>
+	<% end %>
+  </div>
+>>>>>>> ef682751f4d23ca60688003096a5cba93afdd465
 <% end %>
