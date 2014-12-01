@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20141126125140) do
     t.datetime "end_time"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "all_day",     default: false
   end
 
   create_table "users", force: true do |t|

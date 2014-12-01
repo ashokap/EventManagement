@@ -7,7 +7,7 @@
 $(document).ready ->
 
   $("#calendar").fullCalendar(
-    events: '/events.json', height:600
+    events: '/events.json', height:500
     
     header: {
         left: 'prev,next',
