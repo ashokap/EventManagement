@@ -39,7 +39,7 @@
 	<% if (current_user.provider == 'google_oauth2' && !@event.persisted?)%>
 		<%= f.submit("Create and Insert to Google ", class: "btn btn-primary") %>
 	<% else %>
-		<%= f.submit(class: "btn btn-default") %>
+		<%= f.submit(class: "btn btn-primary") %>
 	<% end %>
 </div>
 <% end %>

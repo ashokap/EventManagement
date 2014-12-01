@@ -45,6 +45,10 @@ class EventsController < ApplicationController
           :body => JSON.dump(tmp_event),
           :headers => {'Content-Type' => 'application/json'})
           puts("Result from export; #{result.body}")
+          #Retrieve the unique record Id created in google and save it for future updates
+          @event.google_event_id = result.data.id
+          puts("Id from google: #{result.data.id}")
+        @event.save
         end
         # format.html { redirect_to @event, notice: 'Event was successfully created.' }
         # format.json { render action: 'show', status: :created, location: @event }
@@ -61,9 +65,29 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
-        # format.html { redirect_to @event, notice: 'Event was successfully updated.' }
-        # format.json { head :no_content }
-        format.html { redirect_to action: :index, notice: 'Event created.' }
+
+        #Check if the event has any google_id associated with. If so update the record in google calendar as well
+        unless @event.google_event_id.nil?
+          client = Google::APIClient.new
+          client.authorization.access_token = current_user.token
+          service = client.discovered_api('calendar', 'v3')
+
+          result = client.execute(:api_method => service.events.get, :parameters => {'calendarId' => current_user.email, 'eventId' => @event.google_event_id } )
+          puts("Event returned from google: #{result.data}")
+          tmpevent = result.data
+          tmpevent.summary = @event.title
+          tmpevent.start.dateTime = @event.start_time
+          tmpevent.end.dateTime = @event.end_time
+          tmpevent.description = @event.description
+          tmpevent.location = "PaNa"
+
+          result = client.execute(:api_method => service.events.update,
+          :parameters => {'calendarId' => current_user.email, 'eventId' =>  @event.google_event_id},
+          :body_object => tmpevent,
+          :headers => {'Content-Type' => 'application/json'})
+        end
+
+        format.html { redirect_to action: :index, notice: 'Event updated.' }
       else
         format.html { render action: 'edit' }
         format.json { render json: @event.errors, status: :unprocessable_entity }
@@ -75,8 +99,21 @@ class EventsController < ApplicationController
   # DELETE /events/1.json
   def destroy
     @event.destroy
+
+    #Check and remove the event from google calendar as well
+    if @event.destroyed?
+      unless @event.google_event_id.nil?
+        client = Google::APIClient.new
+        client.authorization.access_token = current_user.token
+        service = client.discovered_api('calendar', 'v3')
+
+        result = client.execute(:api_method => service.events.delete,
+        :parameters => {'calendarId' => current_user.email, 'eventId' => @event.google_event_id})
+      end
+    end
+
     respond_to do |format|
-      format.html { redirect_to events_url }
+      format.html { redirect_to events_url, :notice => "Event '#{@event.title}' has been removed" }
       format.json { head :no_content }
     end
   end

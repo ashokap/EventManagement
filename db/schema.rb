@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141126125140) do
+ActiveRecord::Schema.define(version: 20141201102333) do
 
   create_table "events", force: true do |t|
     t.string   "title"
@@ -20,7 +20,8 @@ ActiveRecord::Schema.define(version: 20141126125140) do
     t.datetime "end_time"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "all_day",     default: false
+    t.boolean  "all_day",         default: false
+    t.string   "google_event_id"
   end
 
   create_table "users", force: true do |t|
