@@ -11,12 +11,23 @@
 <br>
   </div>
 </div> -->
-
-<%= form_tag(events_import_path, :multipart => true) do %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-9" style="background-color:lavender;">
+      <div id="calendar"></div>
+    </div>
+    <div class="col-sm-3" style="background-color:lavenderblush;">
+      <%= form_tag(events_import_path, :multipart => true) do %>
 <p>
 	<%= file_field_tag(:file) %>
 <br />
-	<%= submit_tag("Import File",class: "btn btn-primary") %>  <%= link_to 'New Event', new_event_path,class: "btn btn-success" %>
+	<%= submit_tag("Import File",class: "btn btn-primary") %> 
+	 <%= link_to 'New Event', new_event_path,class: "btn btn-success" %>
 </p>
 	<% end %>
-<div id="calendar"></div>
+    </div>
+  </div>
+</div>
+
+
+
