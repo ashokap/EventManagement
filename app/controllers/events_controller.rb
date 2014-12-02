@@ -118,6 +118,7 @@ class EventsController < ApplicationController
     end
   end
 
+  #Imports and external .ICS file, parses the contents
   def import
     @uploaded_io = params[:file]
 
@@ -135,6 +136,7 @@ class EventsController < ApplicationController
     end
   end
 
+  #Parses an incoming .ICS file and stores events into the DB
   def parse
     # Open a file or pass a string to the parser
     cal_file = File.open( Rails.root.join('public', @uploaded_io.original_filename), "r")
@@ -161,6 +163,7 @@ class EventsController < ApplicationController
     end
   end
 
+  #Exports the events from the DB as an ICS file
   def export
     calendar = Icalendar::Calendar.new
     events=Event.all
@@ -168,11 +171,10 @@ class EventsController < ApplicationController
     events.each do |e|
       event = Icalendar::Event.new
       event.dtstart = e.start_time
-      event.dtend = e.end_time #datetime.strftime("%Y%m%dT%H%M%S%Z")
+      event.dtend = e.end_time 
       event.summary = e.title
       event.description = e.description
       calendar.add_event(event)
-    #puts("Current Event: #{event}")
     end
     calendar.publish
     filename=current_user.email
@@ -191,19 +193,32 @@ class EventsController < ApplicationController
 
     result = client.execute(:api_method => service.events.list,
     :parameters => {'calendarId' => current_user.email})
+    
     while true
-
       events = result.data.items
       events.each do |event|
         puts("Start time: #{event.start.date_time}")
-        # print "Event summary:#{event.summary} , start:#{event.start.to_s} , end:#{event.end}  \n "
-        @event = Event.new(params[:event])
-        @event.assign_attributes(:title => " #{event.summary}", :description => "#{event.description}", :start_time => "#{event.start.date_time}" , :end_time => "#{event.end.date_time}")
-        if Event.exists?(title: @event.title, start_time:@event.start_time, end_time:@event.end_time)
+                
+        if existingEvent=Event.where(:google_event_id => event.id).first
+          existingEvent.title = event.summary
+          existingEvent.description = event.description
+          existingEvent.start_time = event.start.date_time
+          existingEvent.end_time = event.end.date_time
+          existingEvent.google_event_id = event.id
+          puts("Google Import: Update event")
+          existingEvent.save
+         
+        elsif Event.exists?(title: event.summary, start_time:event.start.date_time, end_time:event.start.date_time)
+          #Do nothing. Its a duplicate import
+          puts("Google Import: Duplicate event")
         else
-        @event.save
-        end
-
+          @event = Event.new(params[:event])
+          @event.assign_attributes(:title => " #{event.summary}", :description => "#{event.description}", :start_time => "#{event.start.date_time}" , :end_time => "#{event.end.date_time}",
+         :google_event_id => "#{event.id}")
+         
+         puts("Google Import: New event")
+         @event.save
+        end       
       end
       if !(page_token = result.data.next_page_token)
       break
