@@ -17,14 +17,31 @@
 //= require jquery.datetimepicker/init
 //= require turbolinks
 //= require fullcalendar
-//= require_tree .
+//= require_tree 
 
+$(function() {
 
-$(function (){  
-	$('#event_start_time').datetimepicker({ minDate: 0});  
-	$('#event_end_time').datetimepicker({ minDate: 0});
+	$('#event_start_time').datetimepicker({
+		minDate : 0
+	});
+	$('#event_end_time').datetimepicker({
+		minDate : 0
+	});
 
-	$('#event_startTime').datetimepicker({ beforeShowDay: $.datepicker.noWeekends });  
-    $('#event_endTime').datetimepicker({ beforeShowDay: $.datepicker.noWeekends });  
-	 
+	$('#event_start_time').datetimepicker({
+		beforeShowDay : $.datepicker.noWeekends
+	});
+	$('#event_end_time').datetimepicker({
+		beforeShowDay : $.datepicker.noWeekends
+	});
+
+	// $("p").click(function() {
+		// $(this).hide();
+	// });
+
+		
+	//To enable tooltip for any  kind of HTML element
+	$("[data-toggle='tooltip']").tooltip();
+	
+	
 });

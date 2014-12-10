@@ -10,8 +10,22 @@ $(document).ready ->
     events: '/events.json'
     
     header: {
-        left: 'prev,next',
-        center: 'title',
+        left: 'today'
+        center: 'prevYear,prev,title,next,nextYear',
         right: 'month,agendaWeek,agendaDay',
     }
+    # ,
+    # eventMouseover: function(data, event, view) {
+      # var content = '<h3>'+data.title+'</h3>' + 
+        # '<p><b>Start:</b> '+data.start+'<br />' + 
+        # (data.end && '<p><b>End:</b> '+data.end+'</p>' || '');
+# 
+      # tooltip.set({
+        # 'content.text': content
+      # })
+      # .reposition(event).show(event);
+    # }
+
+
   )
+  
