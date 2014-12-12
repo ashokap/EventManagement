@@ -52,7 +52,7 @@ class EventsController < ApplicationController
         end
         # format.html { redirect_to @event, notice: 'Event was successfully created.' }
         # format.json { render action: 'show', status: :created, location: @event }
-        format.html { redirect_to action: :index, notice: 'Event created.' }
+        format.html { redirect_to events_url, :notice => "Event created." }
       else
         format.html { render action: 'new' }
         format.json { render json: @event.errors, status: :unprocessable_entity }
@@ -67,7 +67,7 @@ class EventsController < ApplicationController
       if @event.update(event_params)
 
         #Check if the event has any google_id associated with. If so update the record in google calendar as well
-        unless @event.google_event_id.nil?
+        unless (@event.google_event_id.nil? && (current_user.provider != 'google_oauth2'))
           client = Google::APIClient.new
           client.authorization.access_token = current_user.token
           service = client.discovered_api('calendar', 'v3')
@@ -85,9 +85,11 @@ class EventsController < ApplicationController
           :parameters => {'calendarId' => current_user.email, 'eventId' =>  @event.google_event_id},
           :body_object => tmpevent,
           :headers => {'Content-Type' => 'application/json'})
+          puts("Inside google update")
         end
+        puts("Outside google update")
 
-        format.html { redirect_to action: :index, notice: 'Event updated.' }
+        format.html { redirect_to events_url, :notice => "Event updated." }
       else
         format.html { render action: 'edit' }
         format.json { render json: @event.errors, status: :unprocessable_entity }
@@ -102,7 +104,7 @@ class EventsController < ApplicationController
 
     #Check and remove the event from google calendar as well
     if @event.destroyed?
-      unless @event.google_event_id.nil?
+      unless @event.google_event_id.nil? && (current_user.provider != 'google_auth2')
         client = Google::APIClient.new
         client.authorization.access_token = current_user.token
         service = client.discovered_api('calendar', 'v3')
@@ -113,7 +115,7 @@ class EventsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to events_url, :notice => "Event '#{@event.title}' has been removed" }
+      format.html { redirect_to events_url, :alert => "Event '#{@event.title}' has been removed" }
       format.json { head :no_content }
     end
   end
