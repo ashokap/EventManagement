@@ -6,8 +6,6 @@
 <!-- Optional theme -->
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"> -->
 
-
-
 <head>
   <title></title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
@@ -21,7 +19,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="http://panainfotech.com/"><b> Event Management</b></a>
     </div>
-    <%if user_signed_in?%>
+    <!-- <%if user_signed_in?%> -->
     <div>
       <ul class="nav navbar-nav">
         <li><%= link_to raw("Export File"), events_export_path, class: "btn btn-block", method: :post %></li>
@@ -32,7 +30,7 @@
       </ul>
     </div>
   </div>
-  <%end %>
+  <!-- <%end %> -->
   <div id="user_nav" align="right">
 	<%if user_signed_in?%>
 	Signed in as <%= current_user.email%>. Not you?

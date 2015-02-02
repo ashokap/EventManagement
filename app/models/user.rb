@@ -1,7 +1,16 @@
 class User < ActiveRecord::Base
+  rolify 
+  #This is a callback after successfully creating a user record to assign defualt role as Admin
+  after_create :assign_default_role
+  
+  def assign_default_role
+    add_role :admin  
+  end  
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  #Disable :confirmable if you do not wish to receive email notifications during sign_up / reset operations
+  devise :database_authenticatable, :registerable,:confirmable,
          :recoverable, :rememberable, :trackable, :validatable, 
          :omniauthable, :omniauth_providers => [:google_oauth2]
    
@@ -13,7 +22,6 @@ class User < ActiveRecord::Base
       user.uid = access_token.uid
       user.token = access_token.credentials.token
       user.save
-      
       return user
     else
       registered_user = User.where(:email => access_token.info.email).first
@@ -27,6 +35,7 @@ class User < ActiveRecord::Base
         user = User.create(provider:access_token.provider,email: data["email"],uid: access_token.uid ,password: Devise.friendly_token[0,20],token:access_token.credentials.token)
       end
    end
+   
   end
   
 end

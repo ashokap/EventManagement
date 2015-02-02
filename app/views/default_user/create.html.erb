@@ -1,15 +1,14 @@
 <div class="container-fluid">
-	<title> Event Management Sign in</title>
+	<title> Event Management Create User</title>
 	<div class="row">
 		<div class="col-lg-2"></div>
 
 		<div class="col-lg-8"  >
 			<div class="jumbotron">
-				<h2>Sign up</h2>
+				<h2>User Details</h2>
 
-				<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-				<%= devise_error_messages! %>
-
+				<%= form_for(@defaultuser, url:default_user_create_path(@defaultuser) ) do |f| %>
+				
 				<div class="field">
 					<%= f.label :email %>
 					<br />
@@ -31,17 +30,11 @@
 					<%= f.password_field :password_confirmation, autocomplete: "off" %>
 				</div>
 
-				<!-- Adding recaptcha section before submit-->
-				<div class="field">
-				<%= recaptcha_tags %>
-				</div>
-				
 				<div class="actions">
-					<%= f.submit "Sign up", class: "btn btn-primary" %>
+					<%= f.submit "Create User", class: "btn btn-primary" %>
 				</div>
 				<% end %>
 
-				<%= render "devise/shared/links" %>
 			</div>
 		</div>
 

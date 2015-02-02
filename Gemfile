@@ -49,6 +49,12 @@ gem 'google-api-client', :require => 'google/api_client'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 
+#For managing Roles for user
+gem "rolify"
+
+#For using Google's recaptcha API
+gem "recaptcha", :require => "recaptcha/rails"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 

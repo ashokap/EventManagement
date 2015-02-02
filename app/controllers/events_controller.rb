@@ -4,6 +4,9 @@ class EventsController < ApplicationController
   # GET /events.json
   def index
     @events = Event.all
+    #This line generates an alphanumeric random string
+    randomstring=SecureRandom.hex(4)
+    puts("Random string: #{randomstring}")
   end
 
   # GET /events/1
