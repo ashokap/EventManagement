@@ -10,7 +10,7 @@ Devise.setup do |config|
   require 'omniauth-google-oauth2'
   config.omniauth :google_oauth2, '965666698821-0foqrvp4gkejcu7c2jeb45m5vltr0sfl.apps.googleusercontent.com',
   'ScpJhBavY7jH3TTe2USH7sY1',
-  { access_type: "offline", approval_prompt: "",  scope: 'userinfo.email,calendar' }
+  { access_type: "offline", approval_prompt: "",  scope: 'userinfo.email,calendar', prompt: "consent" }
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -25,7 +25,8 @@ Devise.setup do |config|
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
-  require 'devise/orm/active_record'
+  #require 'devise/orm/active_record'
+  require 'devise/orm/mongoid' #Added this to support mongoid
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is

@@ -4,9 +4,9 @@ FullcalendarAndRailsExample::Application.routes.draw do
   devise_scope :user do
     authenticated :user do
       root 'events#index', as: :authenticated_root
-      get 'default_user/create' do
-        has_role :admin
-      end
+      # get 'default_user/create' do
+        # has_role :admin
+      # end
     end
     unauthenticated do
       root 'devise/sessions#new', as: :unauthenticated_root

@@ -10,11 +10,22 @@ $(document).ready ->
     events: '/events.json'
     
     header: {
-        left: 'today'
-        center: 'prevYear,prev,title,next,nextYear',
+        left: 'prevYear,prev,today,next,nextYear'
+        center: 'title',
         right: 'month,agendaWeek,agendaDay',
     }
-    # ,
+    
+    
+    dayClick: ->
+        alert('a day has been clicked!');
+    
+    eventMouseover: (data, event, view) ->
+      # Todo: this function should be used to display hover than the function below
+      
+    eventRender: (event, element) ->
+      $(element).tooltip({title: event.title + ' ' + event.description});             
+    
+  
     # eventMouseover: function(data, event, view) {
       # var content = '<h3>'+data.title+'</h3>' + 
         # '<p><b>Start:</b> '+data.start+'<br />' + 
@@ -24,7 +35,7 @@ $(document).ready ->
         # 'content.text': content
       # })
       # .reposition(event).show(event);
-    # }
+    # };
 
 
   )

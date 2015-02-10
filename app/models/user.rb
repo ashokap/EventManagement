@@ -1,5 +1,38 @@
-class User < ActiveRecord::Base
+class User
+  include Mongoid::Document  
+  include Mongoid::Timestamps 
   rolify 
+  ## Database authenticatable
+field :email, :type => String, :default => ""
+field :encrypted_password, :type => String, :default => ""
+field :provider
+field :uid
+field :token
+
+## Recoverable
+field :reset_password_token, :type => String
+field :reset_password_sent_at, :type => Time
+
+## Rememberable
+field :remember_created_at, :type => Time
+
+## Trackable
+field :sign_in_count, :type => Integer, :default => 0
+field :current_sign_in_at, :type => Time
+field :last_sign_in_at, :type => Time
+field :current_sign_in_ip, :type => String
+field :last_sign_in_ip, :type => String
+
+## Confirmable
+  field :confirmation_token,   :type => String
+  field :confirmed_at,         :type => Time
+  field :confirmation_sent_at, :type => Time
+  # field :unconfirmed_email,    :type => String # Only if using reconfirmable
+
+field :name, type: String
+
+  has_many :events
+  
   #This is a callback after successfully creating a user record to assign defualt role as Admin
   after_create :assign_default_role
   
@@ -21,6 +54,7 @@ class User < ActiveRecord::Base
       user.provider = access_token.provider
       user.uid = access_token.uid
       user.token = access_token.credentials.token
+      puts("Inside Google User provider")
       user.save
       return user
     else
@@ -30,6 +64,7 @@ class User < ActiveRecord::Base
         registered_user.uid = access_token.uid
         registered_user.token = access_token.credentials.token
         registered_user.save
+        puts("Inside Google User Register")
         return registered_user
       else
         user = User.create(provider:access_token.provider,email: data["email"],uid: access_token.uid ,password: Devise.friendly_token[0,20],token:access_token.credentials.token)

@@ -3,7 +3,8 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    @events = Event.where(user_id: current_user)
+    #@events = Event.all
     #This line generates an alphanumeric random string
     randomstring=SecureRandom.hex(4)
     puts("Random string: #{randomstring}")
@@ -27,7 +28,10 @@ class EventsController < ApplicationController
   # POST /events.json
   def create
     @event = Event.new(event_params)
-
+    
+    #Set user reference to current user 
+    @event.user=current_user
+    
     respond_to do |format|
       if @event.save
         if current_user.provider == 'google_oauth2'
@@ -51,7 +55,7 @@ class EventsController < ApplicationController
           #Retrieve the unique record Id created in google and save it for future updates
           @event.google_event_id = result.data.id
           puts("Id from google: #{result.data.id}")
-        @event.save
+          @event.save
         end
         # format.html { redirect_to @event, notice: 'Event was successfully created.' }
         # format.json { render action: 'show', status: :created, location: @event }
@@ -141,7 +145,7 @@ class EventsController < ApplicationController
     end
   end
 
-  #Parses an incoming .ICS file and stores events into the DB
+   #Parses an incoming .ICS file and stores events into the DB
   def parse
     # Open a file or pass a string to the parser
     cal_file = File.open( Rails.root.join('public', @uploaded_io.original_filename), "r")
@@ -151,17 +155,20 @@ class EventsController < ApplicationController
     #puts("All Calendars: #{cals}")
     cals.each do |cal|
     # Now you can access the cal object in just the same way I created it
-    # puts("Current Calendar: #{cal}")
       cal.events.each do |event|
       # puts "Current event : #{event}"
         @event = Event.new(params[:event])
+        #Set user reference to current user
+        @event.user=current_user
+        #Assign different values parsed from the Event
         @event.assign_attributes(:title => " #{event.summary}", :description => " #{event.description}", :start_time => "#{event.dtstart}" , :end_time => "#{event.dtend}")
 
         # Check all ready the same event exist at the database, using subject start time and end time.
         # If not exist then the save the event to the local database
-        if Event.exists?(title: @event.title, start_time:@event.start_time, end_time:@event.end_time)
+        if Event.where(title: @event.title, start_time:@event.start_time, end_time:@event.end_time).exists?
+        #Do nothing, move with next event
         else
-        @event.save
+          @event.save
         end
       #puts "start date-time timezone: #{event.dtstart.ical_params['tzid']}"
       end
@@ -176,7 +183,7 @@ class EventsController < ApplicationController
     events.each do |e|
       event = Icalendar::Event.new
       event.dtstart = e.start_time
-      event.dtend = e.end_time 
+      event.dtend = e.end_time
       event.summary = e.title
       event.description = e.description
       calendar.add_event(event)
@@ -198,12 +205,12 @@ class EventsController < ApplicationController
 
     result = client.execute(:api_method => service.events.list,
     :parameters => {'calendarId' => current_user.email})
-    
+
     while true
       events = result.data.items
       events.each do |event|
         puts("Start time: #{event.start.date_time}")
-                
+
         if existingEvent=Event.where(:google_event_id => event.id).first
           existingEvent.title = event.summary
           existingEvent.description = event.description
@@ -212,18 +219,23 @@ class EventsController < ApplicationController
           existingEvent.google_event_id = event.id
           puts("Google Import: Update event")
           existingEvent.save
-         
-        elsif Event.exists?(title: event.summary, start_time:event.start.date_time, end_time:event.start.date_time)
+
+        elsif Event.where(title: event.summary, start_time:event.start.date_time, end_time:event.start.date_time).exists?
           #Do nothing. Its a duplicate import
           puts("Google Import: Duplicate event")
         else
           @event = Event.new(params[:event])
+          
+          #Set user reference to current user
+          @event.user=current_user
+        
+          #Assign different values parsed from the Event
           @event.assign_attributes(:title => " #{event.summary}", :description => "#{event.description}", :start_time => "#{event.start.date_time}" , :end_time => "#{event.end.date_time}",
-         :google_event_id => "#{event.id}")
-         
-         puts("Google Import: New event")
-         @event.save
-        end       
+          :google_event_id => "#{event.id}")
+
+          puts("Google Import: New event")
+          @event.save
+        end
       end
       if !(page_token = result.data.next_page_token)
       break

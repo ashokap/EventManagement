@@ -35,11 +35,7 @@ $(function() {
 		beforeShowDay : $.datepicker.noWeekends
 	});
 
-	// $("p").click(function() {
-		// $(this).hide();
-	// });
-
-		
+	
 	//To enable tooltip for any  kind of HTML element
 	$("[data-toggle='tooltip']").tooltip();
 	

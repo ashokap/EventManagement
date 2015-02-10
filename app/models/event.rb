@@ -1,16 +1,21 @@
-class Event < ActiveRecord::Base
+class Event
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  field :title, :type => String, :default => ""
+  field :start_time, :type => Time, :default => ""
+  field :end_time, :type => Time, :default => ""
+  field :description
+  field :google_event_id
+  field :all_day, :type => Boolean
+  
+  belongs_to :user
   
   validates :title, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
 
-  # def start_must_be_before_end_time
-  # return unless startTime and endTime
-  # errors.add(:startTime, "must be before end time") unless startTime < endTime
-  # end
-  #
+ 
   def end_time_is_after_start_time
-
     logger.debug "This is from debug"
     logger.info "This is from info"
 
