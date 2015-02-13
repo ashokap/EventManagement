@@ -16,6 +16,7 @@
 //= require jquery.datetimepicker
 //= require jquery.datetimepicker/init
 //= require turbolinks
+//= require moment
 //= require fullcalendar
 //= require_tree 
 

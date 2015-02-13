@@ -1,6 +1,11 @@
 
 <div class="container-fluid">
 	<div class="row">
+		<%= form_tag(events_path, :method => "get", id: "search-form") do %>
+  		<%= text_field_tag :search, params[:search], placeholder: "Search Events" %>
+  		<%= submit_tag "Search", :name => nil %>
+		<% end %>
+		<br/>
 		<div class="col-lg-8" style="background-color:lavender;">
 			<div id="calendar"></div>
 		</div>
@@ -21,7 +26,8 @@
 		<div class="row" >
 			<!-- <%= link_to 'New User',  class: "btn btn-success", "data-toggle"=>"tooltip", "title"=>"Create User"  %>
 			<%= link_to 'Create User',  class: "btn btn-success", "data-toggle"=>"tooltip", "title"=>"Create User"  %> -->
-			
+			    
+  </div>
 		</div>
 		</div>
 	</div>

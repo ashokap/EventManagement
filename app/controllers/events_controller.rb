@@ -3,11 +3,30 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = Event.where(user_id: current_user)
-    #@events = Event.all
-    #This line generates an alphanumeric random string
-    randomstring=SecureRandom.hex(4)
-    puts("Random string: #{randomstring}")
+    @events = current_user.events
+    
+    if !params[:search].blank?
+      
+      @events = current_user.events.where(title: /.*#{params[:search]}.*/)
+      #@events = current_user.events.any_of(title: /.*#{params[:search]}.*/ , description: /.*#{params[:search]}.*/ )
+      
+      if @events.count > 0
+        respond_to do |format|
+          format.html { render action: 'searched' }
+        end
+      else
+        redirect_to events_url, :alert => "No events founds"  
+      end
+     else
+        # Returs to Events page
+    end
+  # randomstring=SecureRandom.hex(4)
+  # puts("Random string: #{randomstring}")
+  end
+
+  #Empty method for Search events  
+  def searched
+
   end
 
   # GET /events/1
@@ -28,10 +47,10 @@ class EventsController < ApplicationController
   # POST /events.json
   def create
     @event = Event.new(event_params)
-    
-    #Set user reference to current user 
+
+    #Set user reference to current user
     @event.user=current_user
-    
+
     respond_to do |format|
       if @event.save
         if current_user.provider == 'google_oauth2'
@@ -55,7 +74,7 @@ class EventsController < ApplicationController
           #Retrieve the unique record Id created in google and save it for future updates
           @event.google_event_id = result.data.id
           puts("Id from google: #{result.data.id}")
-          @event.save
+        @event.save
         end
         # format.html { redirect_to @event, notice: 'Event was successfully created.' }
         # format.json { render action: 'show', status: :created, location: @event }
@@ -145,7 +164,7 @@ class EventsController < ApplicationController
     end
   end
 
-   #Parses an incoming .ICS file and stores events into the DB
+  #Parses an incoming .ICS file and stores events into the DB
   def parse
     # Open a file or pass a string to the parser
     cal_file = File.open( Rails.root.join('public', @uploaded_io.original_filename), "r")
@@ -168,7 +187,7 @@ class EventsController < ApplicationController
         if Event.where(title: @event.title, start_time:@event.start_time, end_time:@event.end_time).exists?
         #Do nothing, move with next event
         else
-          @event.save
+        @event.save
         end
       #puts "start date-time timezone: #{event.dtstart.ical_params['tzid']}"
       end
@@ -218,23 +237,23 @@ class EventsController < ApplicationController
           existingEvent.end_time = event.end.date_time
           existingEvent.google_event_id = event.id
           puts("Google Import: Update event")
-          existingEvent.save
+        existingEvent.save
 
         elsif Event.where(title: event.summary, start_time:event.start.date_time, end_time:event.start.date_time).exists?
           #Do nothing. Its a duplicate import
           puts("Google Import: Duplicate event")
         else
           @event = Event.new(params[:event])
-          
+
           #Set user reference to current user
           @event.user=current_user
-        
+
           #Assign different values parsed from the Event
           @event.assign_attributes(:title => " #{event.summary}", :description => "#{event.description}", :start_time => "#{event.start.date_time}" , :end_time => "#{event.end.date_time}",
           :google_event_id => "#{event.id}")
 
           puts("Google Import: New event")
-          @event.save
+        @event.save
         end
       end
       if !(page_token = result.data.next_page_token)

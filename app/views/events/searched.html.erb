@@ -1,0 +1,15 @@
+<div class="container-fluid">
+	<title> Searched Event list</title>
+	
+	<div class="jumbotron">
+		
+		<h1><% @events.each do |event| %> </h1>
+		<p><ul>
+			<li><%= link_to event.title, event_path(event) %></li>
+			</ul>			
+		</p>		
+		<% end %>
+		
+	</div>
+<%= link_to 'Events Page', events_path, class: "btn btn-default" %>
+</div>

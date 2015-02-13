@@ -15,9 +15,8 @@ $(document).ready ->
         right: 'month,agendaWeek,agendaDay',
     }
     
-    
-    dayClick: ->
-        alert('a day has been clicked!');
+    # dayClick: ->
+        # alert('a day has been clicked!');
     
     eventMouseover: (data, event, view) ->
       # Todo: this function should be used to display hover than the function below

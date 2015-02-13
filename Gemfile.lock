@@ -200,6 +200,7 @@ DEPENDENCIES
   jquery-datetimepicker-rails
   jquery-rails
   jquery-ui-rails (~> 4.2.1)
+  momentjs-rails
   mongoid (~> 4.0.0)
   omniauth
   omniauth-google-oauth2
