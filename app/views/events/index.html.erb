@@ -1,35 +1,36 @@
-
 <div class="container-fluid">
 	<div class="row">
 		<%= form_tag(events_path, :method => "get", id: "search-form") do %>
-  		<%= text_field_tag :search, params[:search], placeholder: "Search Events" %>
-  		<%= submit_tag "Search", :name => nil %>
+		<%= text_field_tag :search, params[:search], placeholder: "Search Events" %>
+		<%= submit_tag "Search", :name => nil %>
 		<% end %>
 		<br/>
 		<div class="col-lg-8" style="background-color:lavender;">
 			<div id="calendar"></div>
 		</div>
-		
+
 		<div class="col-sm-3" style="background-color:lavenderblush;">
 			<div class="row">
-			<%= form_tag(events_import_path, :multipart => true) do %>
-			<p>
-				<%= file_field_tag(:file) %>
-				<br />
-				<%= submit_tag("Import File",class: "btn btn-primary") %>
-				<!-- <%= link_to 'New Event', new_event_path,class: "btn btn-success", title:"Create Event", rel:'tooltip' %> -->
-				<%= link_to 'New Event', new_event_path,class: "btn btn-success", "data-toggle"=>"tooltip", "data-placement"=>"right", "title"=>"Create Event"  %>
-				
-			</p>
-			<% end %>
-		</div></br>
-		<div class="row" >
-			<!-- <%= link_to 'New User',  class: "btn btn-success", "data-toggle"=>"tooltip", "title"=>"Create User"  %>
-			<%= link_to 'Create User',  class: "btn btn-success", "data-toggle"=>"tooltip", "title"=>"Create User"  %> -->
-			    
-  </div>
-		</div>
+				<%= form_tag(events_import_path, :multipart => true) do %>
+				<p>
+					<%= file_field_tag(:file) %>
+					<br />
+					<%= submit_tag("Import File",class: "btn btn-primary") %>
+					<!-- <%= link_to 'New Event', new_event_path,class: "btn btn-success", title:"Create Event", rel:'tooltip' %> -->
+					<%= link_to 'New Event', new_event_path,class: "btn btn-success", "data-toggle"=>"tooltip", "data-placement"=>"right", "title"=>"Create Event"  %>
+
+				</p>
+				<% end %>
+			</div></br>
+			<div class="row" >
+				<% if current_user.has_role? :admin %>
+				<%= link_to 'New User', default_user_new_path , class: "btn btn-success", "data-toggle"=>"tooltip", "title"=>"Create User"  %>
+				<% end %>
+				<!-- <%= link_to 'Create User',  class: "btn btn-success", "data-toggle"=>"tooltip", "title"=>"Create User"  %> -->
+
+			</div>
 		</div>
 	</div>
+</div>
 </div>
 

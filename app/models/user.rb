@@ -32,6 +32,7 @@ field :last_sign_in_ip, :type => String
 field :name, type: String
 
   has_many :events
+  belongs_to :account
   
   #This is a callback after successfully creating a user record to assign defualt role as Admin
   after_create :assign_default_role
@@ -73,4 +74,14 @@ field :name, type: String
    
   end
   
+  def self.switch_role
+    if self.has_role :admin
+      self.remove_role :admin
+      self.add_role :normal
+    else
+      self.remove_role :normal
+      self.add_role :admin
+    end
+    
+  end
 end

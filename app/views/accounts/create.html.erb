@@ -1,0 +1,23 @@
+<div class="container-fluid">
+	
+		<%= form_tag(accounts_create_path, :method => "get") do %>
+		<div class="field">
+			<%= label_tag :Name %>
+			
+			<%= text_field_tag :name %>
+		</div>
+		<div class="field">
+			<%= label_tag :Company %>
+			
+			<%= text_field_tag :company %>
+		</div>
+
+		<div class="actions">
+			
+			<%= submit_tag("Update Account", class: "btn btn-primary") %>
+
+		</div>
+		<% end %>
+	
+</div>
+<%= link_to 'Back', events_path, class: "btn btn-default" %>

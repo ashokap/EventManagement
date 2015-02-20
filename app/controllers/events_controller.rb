@@ -3,28 +3,37 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = current_user.events
-    
-    if !params[:search].blank?
+    if current_user.account.nil?
+      redirect_to new_account_path, :notice => "No Account details found. Please Create one before procedding further"
       
-      @events = current_user.events.where(title: /.*#{params[:search]}.*/)
-      #@events = current_user.events.any_of(title: /.*#{params[:search]}.*/ , description: /.*#{params[:search]}.*/ )
-      
-      if @events.count > 0
-        respond_to do |format|
-          format.html { render action: 'searched' }
+    else
+      members=current_user.account.users
+      combinedevents=nil
+      members.each do |member|
+        # combinedevents.add(member.events)
+        puts("Member : #{member.email}, events #{member.events.count}")
+      end
+      #puts("Combined events count: #{combinedevents.count}, members count: #{members.count}")
+      @events = current_user.events
+
+      if !params[:search].blank?
+        @events = current_user.events.where(title: /.*#{params[:search]}.*/)
+        if @events.count > 0
+          respond_to do |format|
+            format.html { render action: 'searched' }
+          end
+        else
+          redirect_to events_url, :alert => "No events founds"
         end
       else
-        redirect_to events_url, :alert => "No events founds"  
+      # Returs to Events page
       end
-     else
-        # Returs to Events page
     end
   # randomstring=SecureRandom.hex(4)
   # puts("Random string: #{randomstring}")
   end
 
-  #Empty method for Search events  
+  #Empty method for Search events
   def searched
 
   end
@@ -32,24 +41,29 @@ class EventsController < ApplicationController
   # GET /events/1
   # GET /events/1.json
   def show
+  
   end
 
   # GET /events/new
   def new
     @event = Event.new
+    @users = current_user.account.users
+      puts("Users count #{@users.count}")
   end
 
   # GET /events/1/edit
   def edit
+    @currentevent = Event.find(params[:id])
+    @users=current_user.account.users
   end
 
   # POST /events
   # POST /events.json
   def create
     @event = Event.new(event_params)
-
+    @users = current_user.account.users
     #Set user reference to current user
-    @event.user=current_user
+    #@event.user=current_user
 
     respond_to do |format|
       if @event.save
@@ -275,7 +289,7 @@ class EventsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def event_params
-    params.require(:event).permit(:title, :description, :start_time, :end_time)
+    params.require(:event).permit(:title, :description, :start_time, :end_time, :user)
   end
 
 end

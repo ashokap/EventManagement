@@ -13,6 +13,7 @@ class Event
   validates :title, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
+  validate :end_time_is_after_start_time
 
  
   def end_time_is_after_start_time
@@ -20,6 +21,7 @@ class Event
     logger.info "This is from info"
 
     return if end_time.blank? || start_time.blank?
+    
     if end_time < start_time
       errors.add(:end_time, "cannot be before the start time")
     end

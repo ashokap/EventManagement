@@ -1,0 +1,42 @@
+<div class="container-fluid">
+	<div class="row">
+		
+		<div class="col-lg-6" style="background-color:lavender;">
+			<p>
+		<strong>Name:</strong>
+		<%= @account.name %>
+		</p>
+
+		<p>
+		<strong>Company:</strong>
+		<%= @account.company %>
+		</p>
+	
+		</div>
+		
+
+		<div class="col-sm-6" style="background-color:lavenderblush;">
+			<div class="row">
+				<strong><p>Users in this company</p></strong>
+				<% @users.each do |user| %>
+				<ul>
+					<% if user.has_role? :admin%>
+					<strong><li>Admin:<%= user.email%></li></strong>
+					<% else%>
+					<li>Normal:<%= user.email%></li>
+					<%end%>
+				</ul>		
+				<% end %>
+			</div>
+		</div>
+	</div>
+	<br />
+	<%if (current_user.has_role? :admin) %>
+		<% if (@account.name.empty?) %>
+			<%= link_to 'Create', new_account_path, class: "btn btn-primary" %>  
+		<% else %>
+			<%= link_to 'Edit', edit_account_path(@account), class: "btn btn-primary" %> 
+		<% end %>
+	<%end%>
+	<%= link_to 'Back', events_path, class: "btn btn-default" %>
+</div>

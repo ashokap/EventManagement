@@ -30,6 +30,9 @@
         <% if current_user.provider == 'google_oauth2'%>
 		<li><%= link_to raw("Import Google Calendar"), events_importevent_path, class: "btn btn-block", method: :post %></li>
 		<% end%> 
+
+		<li><%= link_to "Account",accounts_path,  class: "btn btn-block"%></li>
+
       </ul>
     </div>
   </div>

@@ -25,6 +25,7 @@ $(document).ready ->
       $(element).tooltip({title: event.title + ' ' + event.description});             
     
   
+    
     # eventMouseover: function(data, event, view) {
       # var content = '<h3>'+data.title+'</h3>' + 
         # '<p><b>Start:</b> '+data.start+'<br />' + 
@@ -37,5 +38,17 @@ $(document).ready ->
     # };
 
 
+  )
+  
+  $('#event_start_time').datetimepicker(
+    minDate : 0
+    format:'d-m-Y H:i'
+    beforeShowDay : $.datepicker.noWeekends
+  )
+  
+  $('#event_end_time').datetimepicker(
+    minDate : 0
+    format:'d-m-Y H:i'
+    beforeShowDay : $.datepicker.noWeekends
   )
   

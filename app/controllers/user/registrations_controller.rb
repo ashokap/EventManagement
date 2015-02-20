@@ -33,6 +33,27 @@ class User::RegistrationsController < Devise::RegistrationsController
     end
   end
 
+def createnormal
+   
+   puts("Email:#{params[:user][:email]} \n Password : #{params[:password]} \n Confirmation: #{params[:password_confirmation]}")
+   
+   user=User.new({:email => params[:user][:email], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation] })
+   if user.save
+      #@user=User.create!({:email => params[:user][:email], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation], :confirmed_at => Time.now })
+      puts("User validation true")
+      user.remove_role :admin
+      user.add_role :normal
+      user.account = current_user.account
+      user.save
+      flash[:notice] = "User #{user.email} created successfully"
+      redirect_to events_url
+   else
+     puts("User validation false")
+     flash[:error] = "#{user.errors.full_messages}"
+     redirect_to default_user_new_path
+    end     
+        
+  end
   # GET /resource/edit
   # def edit
   #   super
@@ -78,4 +99,11 @@ class User::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
+  
+  private
+   # Never trust parameters from the scary internet, only allow the white list through.
+  def user_params
+    #params.permit(:email, :password)
+    params.require(:user).permit(:email, :password, :password_confirmation)
+  end
 end

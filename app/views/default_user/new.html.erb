@@ -7,8 +7,21 @@
 			<div class="jumbotron">
 				<h2>User Details</h2>
 
-				<%= form_for(@defaultuser, url:default_user_create_path(@defaultuser) ) do |f| %>
+				<%= form_for(@user, url:user_registrations_createnormal_path(@user) ) do |f| %>
 				
+				<% if @user.errors.any? %>
+				<div id="error_explanation">
+					<h2><%= pluralize(@user.errors.count, "error") %> prohibited this event from being saved:</h2>
+
+					<ul>
+						<% @user.errors.full_messages.each do |msg| %>
+						<li>
+							<%= msg %>
+						</li>
+						<% end %>
+					</ul>
+				</div>
+				<% end %>
 				<div class="field">
 					<%= f.label :email %>
 					<br />
@@ -34,9 +47,11 @@
 					<%= f.submit "Create User", class: "btn btn-primary" %>
 				</div>
 				<% end %>
-
+				
 			</div>
+			<%= link_to "Back", events_url,class: "btn btn-default" %>
 		</div>
+		
 
 		<div class="col-lg-2"></div>
 	</div>
