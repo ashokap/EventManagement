@@ -59,6 +59,21 @@ gem "rolify"
 #For using Google's recaptcha API
 gem "recaptcha", :require => "recaptcha/rails"
 
+#Pundit gem for authorization needs
+gem "pundit"
+
+#Gems for file upload and related functionalities
+gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+
+#This gem is required specifically for rails 4
+gem 'mongoid-grid_fs', github: 'ahoward/mongoid-grid_fs'
+
+#This gem is required specifically to upload files to amazon s3 storage by carrierwave
+gem "fog-aws"
+
+#Officially supported aws gem from amazon for handling file storages using carrierwave
+gem 'carrierwave-aws'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 

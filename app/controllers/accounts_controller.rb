@@ -10,6 +10,8 @@ class AccountsController < ApplicationController
         redirect_to events_path, :alert => "No Account details found. Please inform administrator to create one"
       end
     else
+           
+      puts("Current account's image url: #{@account.file_url}")
       #fetch all users
       @users =  current_user.account.users
     end
@@ -57,7 +59,7 @@ def create
   
   private
   def account_params
-    params.require(:account).permit(:name,:company)
+    params.require(:account).permit(:name,:company, :file, :remove_file)
   end
  
 end

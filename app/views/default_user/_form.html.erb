@@ -1,0 +1,67 @@
+<div class="container-fluid">
+	<div class="row">
+		
+		<div class="col-lg-8"  >
+			<div class="jumbotron">
+				<h2>User Details</h2>
+
+				<%= form_for(@user, url:user_registrations_createnormal_path(@user) ) do |f| %>
+				
+				<% if @user.errors.any? %>
+				<div id="error_explanation">
+					<h2><%= pluralize(@user.errors.count, "error") %> prohibited this event from being saved:</h2>
+
+					<ul>
+						<% @user.errors.full_messages.each do |msg| %>
+						<li>
+							<%= msg %>
+						</li>
+						<% end %>
+					</ul>
+				</div>
+				<% end %>
+				<div class="field">
+					<%= f.label :email %>
+					<br />
+					<%= f.email_field :email, autofocus: true %>
+				</div>
+
+				<div class="field">
+					<%= f.label :password %>
+					<% if @validatable %>
+					<em>(<%= @minimum_password_length %> characters minimum)</em>
+					<% end %>
+					<br />
+					<%= f.password_field :password, autocomplete: "off" %>
+				</div>
+
+				<div class="field">
+					<%= f.label :password_confirmation %>
+					<br />
+					<%= f.password_field :password_confirmation, autocomplete: "off" %>
+				</div>
+				
+				<div class="field">
+					
+  					
+  					<%= radio_button_tag(:role, "admin") %>
+					<%= label_tag(:role_selected, "Admin") %>
+					<%= radio_button_tag(:role, "normal", checked: true) %>
+					<%= label_tag(:role_selected, "Normal") %>
+
+  					
+				</div>
+				
+				<div class="actions">
+					<%= f.submit "Create User", class: "btn btn-primary" %>
+				</div>
+				<% end %>
+				
+			</div>
+			<%= link_to "Back", default_user_index_path,class: "btn btn-default" %>
+		</div>
+		
+
+		<div class="col-lg-2"></div>
+	</div>
+</div>

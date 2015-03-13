@@ -35,18 +35,18 @@ class User::RegistrationsController < Devise::RegistrationsController
 
 def createnormal
    
-   puts("Email:#{params[:user][:email]} \n Password : #{params[:password]} \n Confirmation: #{params[:password_confirmation]}")
+   puts("Email:#{params[:user][:email]} \n Password : #{params[:password]} \n Confirmation: #{params[:password_confirmation]} \n Role: #{params[:role]} ")
    
    user=User.new({:email => params[:user][:email], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation] })
    if user.save
       #@user=User.create!({:email => params[:user][:email], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation], :confirmed_at => Time.now })
       puts("User validation true")
       user.remove_role :admin
-      user.add_role :normal
+      user.add_role params[:role]
       user.account = current_user.account
       user.save
       flash[:notice] = "User #{user.email} created successfully"
-      redirect_to events_url
+      redirect_to default_user_index_path
    else
      puts("User validation false")
      flash[:error] = "#{user.errors.full_messages}"
@@ -54,6 +54,8 @@ def createnormal
     end     
         
   end
+  
+  
   # GET /resource/edit
   # def edit
   #   super
@@ -66,7 +68,7 @@ def createnormal
 
   # DELETE /resource
   # def destroy
-  #   super
+    # super    
   # end
 
   # GET /resource/cancel

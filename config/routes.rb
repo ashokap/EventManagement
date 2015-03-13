@@ -2,7 +2,7 @@ FullcalendarAndRailsExample::Application.routes.draw do
   get "accounts/create"
     
   devise_for :users , :controllers => { :omniauth_callbacks => "omniauth_callbacks", :registrations => "user/registrations" } 
-  #resources :users
+  resources :users, :controller => "default_user"
   
   devise_scope :user do
     authenticated :user do
@@ -21,8 +21,8 @@ FullcalendarAndRailsExample::Application.routes.draw do
   resources :events
   
   get 'default_user/new'
-  get 'default_user/create'
-  post 'default_user/create'
+    
+  get 'default_user/index'
   
   post 'events/import'
   post 'events/export'

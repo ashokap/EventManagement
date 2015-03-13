@@ -1,16 +1,16 @@
 <div class="container-fluid">
 	<div class="row">
+
 		<%= form_tag(events_path, :method => "get", id: "search-form") do %>
 		<%= text_field_tag :search, params[:search], placeholder: "Search Events" %>
 		<%= submit_tag "Search", :name => nil %>
 		<% end %>
 		<br/>
-		<div class="col-lg-8" style="background-color:lavender;">
+		<div class="col-md-6" style="background-color:lavender;">
 			<div id="calendar"></div>
 		</div>
 
-		<div class="col-sm-3" style="background-color:lavenderblush;">
-			<div class="row">
+		<div class="col-md-4" style="background-color:lavenderblush;">
 				<%= form_tag(events_import_path, :multipart => true) do %>
 				<p>
 					<%= file_field_tag(:file) %>
@@ -21,14 +21,8 @@
 
 				</p>
 				<% end %>
-			</div></br>
-			<div class="row" >
-				<% if current_user.has_role? :admin %>
-				<%= link_to 'New User', default_user_new_path , class: "btn btn-success", "data-toggle"=>"tooltip", "title"=>"Create User"  %>
-				<% end %>
-				<!-- <%= link_to 'Create User',  class: "btn btn-success", "data-toggle"=>"tooltip", "title"=>"Create User"  %> -->
-
-			</div>
+			</br>
+			
 		</div>
 	</div>
 </div>

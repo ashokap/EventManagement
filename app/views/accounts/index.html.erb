@@ -1,7 +1,7 @@
 <div class="container-fluid">
-	<div class="row">
+	
 		
-		<div class="col-lg-6" style="background-color:lavender;">
+		<div class="col-lg-8" >
 			<p>
 		<strong>Name:</strong>
 		<%= @account.name %>
@@ -12,24 +12,8 @@
 		<%= @account.company %>
 		</p>
 	
-		</div>
 		
 
-		<div class="col-sm-6" style="background-color:lavenderblush;">
-			<div class="row">
-				<strong><p>Users in this company</p></strong>
-				<% @users.each do |user| %>
-				<ul>
-					<% if user.has_role? :admin%>
-					<strong><li>Admin:<%= user.email%></li></strong>
-					<% else%>
-					<li>Normal:<%= user.email%></li>
-					<%end%>
-				</ul>		
-				<% end %>
-			</div>
-		</div>
-	</div>
 	<br />
 	<%if (current_user.has_role? :admin) %>
 		<% if (@account.name.empty?) %>
@@ -39,4 +23,5 @@
 		<% end %>
 	<%end%>
 	<%= link_to 'Back', events_path, class: "btn btn-default" %>
+	</div>
 </div>

@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/ahoward/mongoid-grid_fs.git
+  revision: 2507e65a60206cb726c0a38bdab8dd343150c0e0
+  specs:
+    mongoid-grid_fs (2.1.0)
+      mime-types (>= 1.0, < 3.0)
+      mongoid (>= 3.0, < 5.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -31,9 +39,26 @@ GEM
       addressable (>= 2.3.1)
       extlib (>= 0.9.15)
       multi_json (>= 1.0.0)
+    aws-sdk (1.63.0)
+      aws-sdk-v1 (= 1.63.0)
+    aws-sdk-v1 (1.63.0)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     bcrypt (3.1.10)
     bson (2.3.0)
     builder (3.1.4)
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
+    carrierwave-aws (0.5.0)
+      aws-sdk (~> 1.58)
+      carrierwave (~> 0.7)
+    carrierwave-mongoid (0.7.1)
+      carrierwave (>= 0.8.0, < 0.11.0)
+      mongoid (>= 3.0, < 5.0)
+      mongoid-grid_fs (>= 1.3, < 3.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -50,10 +75,29 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     erubis (2.7.0)
+    excon (0.44.3)
     execjs (2.3.0)
     extlib (0.9.16)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
+    fog-aws (0.1.1)
+      fog-core (~> 1.27)
+      fog-json (~> 1.0)
+      fog-xml (~> 0.1)
+      ipaddress (~> 0.8)
+    fog-core (1.29.0)
+      builder
+      excon (~> 0.38)
+      formatador (~> 0.2)
+      mime-types
+      net-scp (~> 1.1)
+      net-ssh (>= 2.1.3)
+    fog-json (1.0.0)
+      multi_json (~> 1.0)
+    fog-xml (0.1.1)
+      fog-core
+      nokogiri (~> 1.5, >= 1.5.11)
+    formatador (0.2.5)
     fullcalendar-rails (2.2.5.1)
       jquery-rails (>= 3.1.1, < 5.0.0)
       momentjs-rails (~> 2.8, >= 2.8.4)
@@ -71,6 +115,7 @@ GEM
     hike (1.2.3)
     i18n (0.7.0)
     icalendar (2.2.2)
+    ipaddress (0.8.0)
     jbuilder (1.5.3)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
@@ -88,6 +133,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25.1)
+    mini_portile (0.6.2)
     minitest (4.7.5)
     momentjs-rails (2.9.0)
       railties (>= 3.1)
@@ -103,6 +149,11 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.9.2)
+    nokogiri (1.6.6.2)
+      mini_portile (~> 0.6.0)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -124,6 +175,8 @@ GEM
     origin (2.1.1)
     orm_adapter (0.5.0)
     polyglot (0.3.5)
+    pundit (0.3.0)
+      activesupport (>= 3.0.0)
     rack (1.5.2)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -191,8 +244,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  carrierwave-aws
+  carrierwave-mongoid
   coffee-rails (~> 4.0.0)
   devise
+  fog-aws
   fullcalendar-rails
   google-api-client
   icalendar
@@ -202,8 +258,10 @@ DEPENDENCIES
   jquery-ui-rails (~> 4.2.1)
   momentjs-rails
   mongoid (~> 4.0.0)
+  mongoid-grid_fs!
   omniauth
   omniauth-google-oauth2
+  pundit
   rails (= 4.0.2)
   recaptcha
   rolify

@@ -4,21 +4,40 @@ class DefaultUserController < ApplicationController
      @user=User.new 
   end
 
-  def create
-    @user=User.new(user_params)
-    
-    puts("Email:#{params[:user][:email]} \n Password : #{params[:password]} \n Confirmation: #{params[:password_confirmation]}")
-    
-    
-   @user=User.create!({:email => params[:user][:email], :password => params[:user][:password], :password_confirmation => params[:user][:password_confirmation], :confirmed_at => Time.now })
-   #@defaultuser=User.create!()
-    # @user.remove_role :admin
-    # @user.add_role :normal
-    # Change role from admin to normal
-    @user.switch_role
-    flash[:notice] = "User #{@user.email} created successfully"
-    redirect_to events_url
-        
+  def index
+    @users=current_user.account.users
+  end
+  
+  def edit
+    @user=User.find(params[:id])
+  end
+  
+  def update
+    respond_to do |format|
+      
+      @user=User.find(params[:id])
+      #This fetches the rarray of roles assiged to the user and gets the first element of this array as current role.
+      current_role=@user.roles.first.name
+      
+      puts("current_role: #{current_role}")
+      @user.remove_role current_role
+       @user.add_role params[:role]
+       
+       if @user.update
+         format.html { redirect_to users_path, :notice => "User Role updated." }
+       else
+         format.html { render action: 'edit' }
+         format.json { render json: @user.errors, status: :unprocessable_entity }
+       end
+    end
+  end
+  
+  def destroy
+    user = User.find(params[:id])
+    if user.destroy
+      flash[:notice] = "Successfully deleted User #{user.email}."
+      redirect_to default_user_index_path
+    end
   end
   
   private
