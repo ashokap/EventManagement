@@ -7,8 +7,8 @@ CarrierWave.configure do |config|
   config.aws_authenticated_url_expiration = 60 * 60 * 24 * 365
 
   config.aws_credentials = {
-    access_key_id:     'AKIAJIYMBQJ6HQXUT6OQ',
-    secret_access_key: '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'
+    access_key_id:     'AKIAIAAYVBD5RLNACTLQ',
+    secret_access_key: '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'
   }
   
   #Config when using fog
