@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @case.name %>
+</p>
+
+<p>
+  <strong>Stage:</strong>
+  <%= @case.stage %>
+</p>
+
+<p>
+  <strong>Starting date:</strong>
+  <%= @case.starting_date.strftime("%d-%m-%Y") %>
+</p>
+
+<p>
+  <strong>Ending date:</strong>
+  <%= @case.ending_date.strftime("%d-%m-%Y") %>
+</p>
+
+<p>
+  <strong>Next hearing:</strong>
+  <%= @case.next_hearing.nil? ? '' : @case.next_hearing.strftime("%d-%m-%Y") %>
+</p>
+
+<%= link_to 'Edit', edit_case_path(@case) %> |
+<%= link_to 'Back', cases_path %>

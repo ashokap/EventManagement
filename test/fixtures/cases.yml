@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  stage: MyString
+  starting_date: 2015-03-25
+  ending_date: 2015-03-25
+  next_hearing: 2015-03-25
+
+two:
+  name: MyString
+  stage: MyString
+  starting_date: 2015-03-25
+  ending_date: 2015-03-25
+  next_hearing: 2015-03-25

@@ -1,4 +1,6 @@
 FullcalendarAndRailsExample::Application.routes.draw do
+  resources :cases
+
   get "accounts/create"
     
   devise_for :users , :controllers => { :omniauth_callbacks => "omniauth_callbacks", :registrations => "user/registrations" } 
